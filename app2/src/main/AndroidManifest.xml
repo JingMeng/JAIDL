@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.fenfei.app">
+    package="me.fenfei.app2">
 
     <application
         android:allowBackup="true"
@@ -12,10 +12,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".Main3Activity"
+            android:name=".Main2Activity"
             android:process=":remote" />
-        <activity android:name=".Main2Activity"
-            />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
