@@ -43,7 +43,10 @@ public class Main4Activity extends AppCompatActivity {
     }
 
     private void bindService() {
-        Intent intent = new Intent(this, DoService.class);
+//        Intent intent = new Intent(this, DoService.class);
+        Intent intent = new Intent();
+        Class clazz = DoService.class;
+        intent.setClassName(clazz.getPackage().getName(), clazz.getName());
         bindService(intent, new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
