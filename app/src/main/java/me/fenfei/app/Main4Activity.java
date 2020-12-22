@@ -60,4 +60,25 @@ public class Main4Activity extends AppCompatActivity {
             }
         }, BIND_AUTO_CREATE);
     }
+    /**
+     * 做基本的测试
+     */
+    private void bindService2() {
+//        Intent intent = new Intent(this, DoService.class);
+        Intent intent = new Intent();
+        Class clazz = DoService.class;
+        intent.setClassName(clazz.getPackage().getName(), clazz.getName());
+        bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+//                mAdd = service;
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        }, BIND_AUTO_CREATE);
+    }
 }
