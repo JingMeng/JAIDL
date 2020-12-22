@@ -117,3 +117,7 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
  
 ### AIDL的介绍
  
+1. 基本定义：AIDL是Android Interface Definition Languagee的缩写。从名称看它是一种语言，而且是专门用于描述接口的语言。准确的来说，他是用于定义客户端、度无端通信接口的一种描述语言。
+   
+   
+  
