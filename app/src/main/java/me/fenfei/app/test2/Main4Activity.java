@@ -22,6 +22,7 @@ public class Main4Activity extends AppCompatActivity {
     private Add mAdd;
     private boolean remote = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -114,7 +114,11 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
 
 ![几种方式比较](pic/几种方式比较.png)
 
+[其实官方也存在一个替我们总结好的服务绑定文档](https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn)
  
+ https://developer.android.google.cn/guide/components/activities/parcelables-and-bundles?hl=zh-cn
+ 
+ Binder 事务缓冲区的大小固定有限，目前为 1MB，由进程中正在处理的所有事务共享。由于此限制是进程级别而不是 Activity 级别的限制，因此这些事务包括应用中的所有 binder 事务，例如 onSaveInstanceState，startActivity 以及与系统的任何互动。超过大小限制时，将引发 TransactionTooLargeException。
 ### AIDL的介绍
  
 1. 基本定义：AIDL是Android Interface Definition Languagee的缩写。从名称看它是一种语言，而且是专门用于描述接口的语言。准确的来说，他是用于定义客户端、度无端通信接口的一种描述语言。
@@ -281,3 +285,132 @@ public interface Add extends android.os.IInterface
   }
   public int add(int a, int b) throws android.os.RemoteException;
 }
+
+
+基本使用
+https://developer.android.google.cn/guide/components/aidl?hl=zh_cn
+调用 IPC 方法
+如要调用通过 AIDL 定义的远程接口，调用类必须执行以下步骤：
+
+在项目的 src/ 目录中加入 .aidl 文件。
+声明一个 IBinder 接口实例（基于 AIDL 生成）。
+实现 ServiceConnection。
+调用 Context.bindService()，从而传入您的 ServiceConnection 实现。
+在 onServiceConnected() 实现中，您将收到一个 IBinder 实例（名为 service）。调用 YourInterfaceName.Stub.asInterface((IBinder)service)，以将返回的参数转换为 YourInterface 类型。
+调用您在接口上定义的方法。您应始终捕获 DeadObjectException 异常，系统会在连接中断时抛出此异常。您还应捕获 SecurityException 异常，当 IPC 方法调用中两个进程的 AIDL 定义发生冲突时，系统会抛出此异常。
+如要断开连接，请使用您的接口实例调用 Context.unbindService()。
+有关调用 IPC 服务的几点说明：
+
+对象是跨进程计数的引用。
+您可以方法参数的形式发送匿名对象。
+
+public class Main4Activity extends AppCompatActivity {
+
+    private Add mAdd;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main4);
+       
+        bindService();
+
+        findViewById(R.id.sum_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    int  sum = mAdd.add(1, 1);
+                    Log.i(TAG, "====sum = " + sum);
+
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    private void bindService() {
+
+        Intent intent = new Intent();
+        Class clazz = DoService.class;
+        intent.setClassName(clazz.getPackage().getName(), clazz.getName());
+        bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mAdd = Add.Stub.asInterface(service);
+
+            }
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        }, BIND_AUTO_CREATE);
+    }
+}
+
+可能有同学会说，我直接调用不行吗？为什么非得这样写，在同一个app里面又不是访问不到
+
+
+public class Main4Activity extends AppCompatActivity {
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main4);
+        
+        bindService();
+
+        findViewById(R.id.sum_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    int  sum = stubBinder.add(1, 1);
+                    Log.i(TAG, "====sum = " + sum);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private DoService.StubBinder stubBinder;
+
+    private void bindService2() {
+        Intent intent = new Intent(this, DoService.class);
+        bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                try {
+                    stubBinder = (DoService.StubBinder) service;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        }, BIND_AUTO_CREATE);
+    }
+}
+
+如果你按照上面的写法去写，你将得到下面的错误
+
+java.lang.ClassCastException: android.os.BinderProxy cannot be cast to me.fenfei.app.test2.DoService$StubBinder
+    at me.fenfei.app.test2.Main4Activity$3.onServiceConnected(Main4Activity.java:87)
+    at android.app.LoadedApk$ServiceDispatcher.doConnected(LoadedApk.java:1730)
+    at android.app.LoadedApk$ServiceDispatcher$RunConnection.run(LoadedApk.java:1762)
+    at android.os.Handler.handleCallback(Handler.java:873)
+    at android.os.Handler.dispatchMessage(Handler.java:99)
+    at android.os.Looper.loop(Looper.java:193)
+    at android.app.ActivityThread.main(ActivityThread.java:6669)
+    at java.lang.reflect.Method.invoke(Native Method)
+    at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:493)
+    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:858)
+    
+    
+    
+    可以看到在跨进程通讯的时候，我们得到的不是原始对象，而是一个代理对象，这个代理对象作为一个中间桥梁帮助我们进行通讯
+    
+    还有另外一条是，在跨进程，多app的时候，我们是获取不到DoService这个类的，这个类只存在某一个apk中
