@@ -1,6 +1,7 @@
 package me.fenfei.app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import me.fenfei.app.utils.Utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -19,7 +20,7 @@ public class Main3Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main3);
 
         setTitle("Main3Activity");
-        Log.i(TAG, value + "=====this==Main3Activity===========");
+        Log.i(TAG, value + "=====this==Main3Activity===========" + Utils.getProcessName());
 
 
     }

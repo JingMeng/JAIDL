@@ -1,6 +1,7 @@
 package me.fenfei.app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import me.fenfei.app.utils.Utils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setTitle("MainActivity");
-
+        Log.i(TAG, value + "=====to==Main2Activity===========" + Utils.getProcessName());
         findViewById(R.id.to_next_activity).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,6 +1,7 @@
 package me.fenfei.app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import me.fenfei.app.utils.Utils;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,6 @@ public class Main2Activity extends AppCompatActivity {
         setTitle("Main2Activity");
 
 
-        Log.i(TAG, value + "=====this==Main2Activity===========");
+        Log.i(TAG, value + "=====this==Main2Activity===========" + Utils.getProcessName());
     }
 }
