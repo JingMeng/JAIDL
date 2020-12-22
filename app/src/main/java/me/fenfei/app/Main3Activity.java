@@ -3,6 +3,10 @@ package me.fenfei.app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
+
+import static me.fenfei.app.MainActivity.TAG;
+import static me.fenfei.app.MainActivity.value;
 
 public class Main3Activity extends AppCompatActivity {
 
@@ -10,5 +14,6 @@ public class Main3Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+        Log.i(TAG, value + "=====this==Main3Activity===========");
     }
 }
