@@ -15,6 +15,9 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
+        setTitle("Main2Activity");
+
+
         Log.i(TAG, value + "=====this==Main2Activity===========");
     }
 }

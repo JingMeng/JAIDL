@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle("MainActivity");
+
         findViewById(R.id.to_next_activity).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

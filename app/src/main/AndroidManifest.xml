@@ -14,7 +14,8 @@
         <activity
             android:name=".Main3Activity"
             android:process=":Main3Activity" />
-        <activity android:name=".Main2Activity" />
+        <activity android:name=".Main2Activity"
+            />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
