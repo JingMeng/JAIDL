@@ -26,4 +26,14 @@
         android:gravity="center"
         android:text="Main3Activity"
         android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/to_next_activity3"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="Main4Activity"
+        android:textColor="@android:color/white" />
 </LinearLayout>
