@@ -1,6 +1,11 @@
 package me.fenfei.app;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import me.fenfei.app.test1.Main2Activity;
+import me.fenfei.app.test1.Main3Activity;
+import me.fenfei.app.test2.Main4Activity;
+import me.fenfei.app.test2.Main5Activity;
 import me.fenfei.app.utils.Utils;
 
 import android.content.Intent;
@@ -43,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Main4Activity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.to_next_activity4).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Main5Activity.class);
                 startActivity(intent);
             }
         });

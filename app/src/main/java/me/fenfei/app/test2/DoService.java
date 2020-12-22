@@ -1,4 +1,4 @@
-package me.fenfei.app;
+package me.fenfei.app.test2;
 
 import android.app.Service;
 import android.content.Intent;

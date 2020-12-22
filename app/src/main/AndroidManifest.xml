@@ -11,19 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".test2.Main5Activity"></activity>
         <activity
-            android:name=".Main4Activity"
+            android:name=".test2.Main4Activity"
             android:process=":remote" />
 
         <service
-            android:name=".DoService"
+            android:name=".test2.DoService"
             android:enabled="true"
             android:exported="true" />
 
         <activity
-            android:name=".Main3Activity"
+            android:name=".test1.Main3Activity"
             android:process=":remote" />
-        <activity android:name=".Main2Activity" />
+        <activity android:name=".test1.Main2Activity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

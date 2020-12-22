@@ -1,6 +1,8 @@
-package me.fenfei.app;
+package me.fenfei.app.test1;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import me.fenfei.app.R;
 import me.fenfei.app.utils.Utils;
 
 import android.os.Bundle;
