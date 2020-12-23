@@ -114,9 +114,12 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
 
 ![几种方式比较](pic/几种方式比较.png)
 
-[其实官方也存在一个替我们总结好的服务绑定文档](https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn)
- 
- https://developer.android.google.cn/guide/components/activities/parcelables-and-bundles?hl=zh-cn
+另外针对绑定服务和对象，官方文档也为我们提供了明确的说明：
+
+针对绑定服务
+[绑定服务概览](https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn)
+针对对象
+[Parcelable 和 Bundle](https://developer.android.google.cn/guide/components/activities/parcelables-and-bundles?hl=zh-cn)
  
  Binder 事务缓冲区的大小固定有限，目前为 1MB，由进程中正在处理的所有事务共享。由于此限制是进程级别而不是 Activity 级别的限制，因此这些事务包括应用中的所有 binder 事务，例如 onSaveInstanceState，startActivity 以及与系统的任何互动。超过大小限制时，将引发 TransactionTooLargeException。
 ### AIDL的介绍
@@ -159,10 +162,11 @@ AIDL是Android Interface Definition Languagee的缩写。从名称看它是一�
 	   
 	   // Declare any non-default types here with import statements
 	   interface Add {
+	   //此处简单的定义了两个数相加并返回相加的和
 	      int add(int a,int b);
 	   }
 
-执行Rebulid Project，在下面路径下相同的包名内，将看到系统工具为我们生成的对应 Add.aidl的 Add.java 类
+执行Rebulid Project。在工程的下面路径下，相同的包名内；将看到系统工具为我们生成的对应 Add.aidl的 Add.java 类
   
 	/build/generated/aidl_source_output_dir/debug/compileDebugAidl/out
 
