@@ -124,17 +124,17 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
 #####1. 基本定义：
 AIDL是Android Interface Definition Languagee的缩写。从名称看它是一种语言，而且是专门用于描述接口的语言。准确的来说，他是用于定义客户端、度无端通信接口的一种描述语言。
 
-#####2. [基本使用](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn)
-2.1 调用 IPC 方法,如要调用通过 AIDL 定义的远程接口，调用类必须执行以下步骤：
- 2.1.1 在项目的 src/ 目录中加入 .aidl 文件。
- 2.1.2 声明一个 IBinder 接口实例（基于 AIDL 生成）。
- 2.1.3 实现 ServiceConnection。
- 2.1.4 调用 Context.bindService()，从而传入您的 ServiceConnection 实现。
+#####2. [基本使用](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn)<br/>
+2.1 调用 IPC 方法,如要调用通过 AIDL 定义的远程接口，调用类必须执行以下步骤：<br/>
+ 2.1.1 在项目的 src/ 目录中加入 .aidl 文件。<br/>
+ 2.1.2 声明一个 IBinder 接口实例（基于 AIDL 生成）。<br/>
+ 2.1.3 实现 ServiceConnection。<br/>
+ 2.1.4 调用 Context.bindService()，从而传入您的 ServiceConnection 实现。<br/>
       在 onServiceConnected() 实现中，您将收到一个 IBinder 实例（名为 service）。调用 YourInterfaceName.Stub.asInterface((IBinder)service)，以将返回的参数转换为 YourInterface 类型。
 调用您在接口上定义的方法。您应始终捕获 DeadObjectException 异常，系统会在连接中断时抛出此异常。您还应捕获 SecurityException 异常，当 IPC 方法调用中两个进程的 AIDL 定义发生冲突时，系统会抛出此异常。
 如要断开连接，请使用您的接口实例调用 Context.unbindService()。
    
-2.2 创建
+2.2 创建<br/>
 ![create](pic/create.png)
 
 通过上面的方式，系统将帮我们生成如下模板代码：
