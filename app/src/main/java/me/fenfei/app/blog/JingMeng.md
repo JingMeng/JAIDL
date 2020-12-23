@@ -121,7 +121,15 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
 针对对象
 [Parcelable 和 Bundle](https://developer.android.google.cn/guide/components/activities/parcelables-and-bundles?hl=zh-cn)
  
+ 此外在跨程传递数据的时候，数据传递的大小也是有限制的
+ 
  Binder 事务缓冲区的大小固定有限，目前为 1MB，由进程中正在处理的所有事务共享。由于此限制是进程级别而不是 Activity 级别的限制，因此这些事务包括应用中的所有 binder 事务，例如 onSaveInstanceState，startActivity 以及与系统的任何互动。超过大小限制时，将引发 TransactionTooLargeException。
+
+ 如下代码可以测试：
+    
+    byte[] data = new byte[1024*1024];
+    intent.putExtra("data", data);
+      
 ### AIDL的介绍
  
 #####1. 基本定义：<br/>
