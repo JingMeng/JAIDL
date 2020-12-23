@@ -112,7 +112,7 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
 
 针对几种方式，《Android艺术开发探索》提供了如下对比图
 
-![几种方式比较](pic/几种方式比较.png)
+![compare](pic/compare.png)
 
 另外针对绑定服务和对象，官方文档也为我们提供了明确的说明：
 
