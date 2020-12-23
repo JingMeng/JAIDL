@@ -146,17 +146,16 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
 	               double aDouble, String aString);
 	   }
 
-
-	// Add.aidl
-	package me.fenfei.app.aidl;
-	
-	// Declare any non-default types here with import statements
-	
-	interface Add {
-	
-	   int add(int a,int b);
-	
-	}
+        // Add.aidl
+        package me.fenfei.app.aidl;
+        
+        // Declare any non-default types here with import statements
+        
+        interface Add {
+        
+           int add(int a,int b);
+        
+        }
 
 
 
