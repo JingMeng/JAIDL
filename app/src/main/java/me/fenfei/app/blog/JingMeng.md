@@ -121,18 +121,23 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
  Binder 事务缓冲区的大小固定有限，目前为 1MB，由进程中正在处理的所有事务共享。由于此限制是进程级别而不是 Activity 级别的限制，因此这些事务包括应用中的所有 binder 事务，例如 onSaveInstanceState，startActivity 以及与系统的任何互动。超过大小限制时，将引发 TransactionTooLargeException。
 ### AIDL的介绍
  
-1. 基本定义：AIDL是Android Interface Definition Languagee的缩写。从名称看它是一种语言，而且是专门用于描述接口的语言。准确的来说，他是用于定义客户端、度无端通信接口的一种描述语言。
-2. [基本使用](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn)
- 调用 IPC 方法,如要调用通过 AIDL 定义的远程接口，调用类必须执行以下步骤：
- 2.1 在项目的 src/ 目录中加入 .aidl 文件。
- 2.2 声明一个 IBinder 接口实例（基于 AIDL 生成）。
- 2.3 实现 ServiceConnection。
- 2.4 调用 Context.bindService()，从而传入您的 ServiceConnection 实现。
+#####1. 基本定义：
+AIDL是Android Interface Definition Languagee的缩写。从名称看它是一种语言，而且是专门用于描述接口的语言。准确的来说，他是用于定义客户端、度无端通信接口的一种描述语言。
+
+#####2. [基本使用](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn)
+2.1 调用 IPC 方法,如要调用通过 AIDL 定义的远程接口，调用类必须执行以下步骤：
+ 2.1.1 在项目的 src/ 目录中加入 .aidl 文件。
+ 2.1.2 声明一个 IBinder 接口实例（基于 AIDL 生成）。
+ 2.1.3 实现 ServiceConnection。
+ 2.1.4 调用 Context.bindService()，从而传入您的 ServiceConnection 实现。
       在 onServiceConnected() 实现中，您将收到一个 IBinder 实例（名为 service）。调用 YourInterfaceName.Stub.asInterface((IBinder)service)，以将返回的参数转换为 YourInterface 类型。
 调用您在接口上定义的方法。您应始终捕获 DeadObjectException 异常，系统会在连接中断时抛出此异常。您还应捕获 SecurityException 异常，当 IPC 方法调用中两个进程的 AIDL 定义发生冲突时，系统会抛出此异常。
 如要断开连接，请使用您的接口实例调用 Context.unbindService()。
-    
-这个是系统帮我们生成的模板代码：
+   
+2.2 创建
+![create](pic/create.png)
+
+通过上面的方式，系统将帮我们生成如下模板代码：
    
 	  // Add.aidl
 	  package me.fenfei.app.aidl;
@@ -295,9 +300,6 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
 
 
 
-
-对象是跨进程计数的引用。
-您可以方法参数的形式发送匿名对象。
 	
 	public class Main4Activity extends AppCompatActivity {
 	
