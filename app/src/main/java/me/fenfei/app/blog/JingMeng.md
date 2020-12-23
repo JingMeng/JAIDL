@@ -426,9 +426,9 @@ AIDL是Android Interface Definition Languagee的缩写。从名称看它是一�
 
 资料
 
-> [官网介绍地址](https://stuff.mit.edu/afs/sipb/project/android/docs/guide/components/processes-and-threads.html)
-> [绑定服务概览](https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn)
-> [Parcelable 和 Bundle](https://developer.android.google.cn/guide/components/activities/parcelables-and-bundles?hl=zh-cn)
-> [基本使用](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn)
-> 《Android艺术开发探索》
-> 《深入理解Android内核设计思想》
+* * [官网介绍地址](https://stuff.mit.edu/afs/sipb/project/android/docs/guide/components/processes-and-threads.html)
+* * [绑定服务概览](https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn)
+* * [Parcelable 和 Bundle](https://developer.android.google.cn/guide/components/activities/parcelables-and-bundles?hl=zh-cn)
+* * [基本使用](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn)
+* * 《Android艺术开发探索》
+* * 《深入理解Android内核设计思想》
