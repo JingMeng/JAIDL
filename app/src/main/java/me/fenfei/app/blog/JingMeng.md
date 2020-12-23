@@ -121,7 +121,7 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
  Binder 事务缓冲区的大小固定有限，目前为 1MB，由进程中正在处理的所有事务共享。由于此限制是进程级别而不是 Activity 级别的限制，因此这些事务包括应用中的所有 binder 事务，例如 onSaveInstanceState，startActivity 以及与系统的任何互动。超过大小限制时，将引发 TransactionTooLargeException。
 ### AIDL的介绍
  
-#####1. 基本定义：
+#####1. 基本定义：<br/>
 AIDL是Android Interface Definition Languagee的缩写。从名称看它是一种语言，而且是专门用于描述接口的语言。准确的来说，他是用于定义客户端、度无端通信接口的一种描述语言。
 
 #####2. [基本使用](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn)<br/>
