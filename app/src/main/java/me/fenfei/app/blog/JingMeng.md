@@ -312,6 +312,7 @@ AIDL是Android Interface Definition Languagee的缩写。从名称看它是一�
 
 
 
+2.3 基本使用：
 	
 	public class Main4Activity extends AppCompatActivity {
 	
@@ -356,53 +357,52 @@ AIDL是Android Interface Definition Languagee的缩写。从名称看它是一�
 	    }
 	}
 
+2.4 测试
+ 
 可能有同学会说，我直接调用不行吗？为什么非得这样写，在同一个app里面又不是访问不到
 
-
-public class Main4Activity extends AppCompatActivity {
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main4);
-        
-        bindService();
-
-        findViewById(R.id.sum_bt).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    int  sum = stubBinder.add(1, 1);
-                    Log.i(TAG, "====sum = " + sum);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+    public class Main4Activity extends AppCompatActivity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main4);
+            
+            bindService();
+    
+            findViewById(R.id.sum_bt).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        int  sum = stubBinder.add(1, 1);
+                        Log.i(TAG, "====sum = " + sum);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
-    }
-
-    private DoService.StubBinder stubBinder;
-
-    private void bindService2() {
-        Intent intent = new Intent(this, DoService.class);
-        bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                try {
-                    stubBinder = (DoService.StubBinder) service;
-                } catch (Exception e) {
-                    e.printStackTrace();
+            });
+        }
+    
+        private DoService.StubBinder stubBinder;
+    
+        private void bindService2() {
+            Intent intent = new Intent(this, DoService.class);
+            bindService(intent, new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    try {
+                        stubBinder = (DoService.StubBinder) service;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
-        }, BIND_AUTO_CREATE);
+    
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+    
+                }
+            }, BIND_AUTO_CREATE);
+        }
     }
-}
 
 如果你按照上面的写法去写，你将得到下面的错误
 	
