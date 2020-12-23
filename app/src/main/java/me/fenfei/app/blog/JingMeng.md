@@ -131,38 +131,37 @@ AIDL ，Messager，Broadcast，ContentProvider ，甚至还可以使用文件和
       在 onServiceConnected() 实现中，您将收到一个 IBinder 实例（名为 service）。调用 YourInterfaceName.Stub.asInterface((IBinder)service)，以将返回的参数转换为 YourInterface 类型。
 调用您在接口上定义的方法。您应始终捕获 DeadObjectException 异常，系统会在连接中断时抛出此异常。您还应捕获 SecurityException 异常，当 IPC 方法调用中两个进程的 AIDL 定义发生冲突时，系统会抛出此异常。
 如要断开连接，请使用您的接口实例调用 Context.unbindService()。
+    
+这个是系统帮我们生成的模板代码：
    
+	  // Add.aidl
+	  package me.fenfei.app.aidl;
+	  
+	  // Declare any non-default types here with import statements
+	  interface Add {
+	      /**
+	       * Demonstrates some basic types that you can use as parameters
+	       * and return values in AIDL.
+	       */
+	      void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat,
+	              double aDouble, String aString);
+	  }
+
+清空body，定义我们的业务需求方法
+	
 	   // Add.aidl
 	   package me.fenfei.app.aidl;
 	   
 	   // Declare any non-default types here with import statements
-	   
 	   interface Add {
-	       /**
-	        * Demonstrates some basic types that you can use as parameters
-	        * and return values in AIDL.
-	        */
-	       void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat,
-	               double aDouble, String aString);
+	      int add(int a,int b);
 	   }
 
-        // Add.aidl
-        package me.fenfei.app.aidl;
-        
-        // Declare any non-default types here with import statements
-        
-        interface Add {
-        
-           int add(int a,int b);
-        
-        }
-
-
-
-Rebulid Project
-  
+执行Rebulid Project，在下面路径下相同的包名内，将看到系统工具为我们生成的对应 Add.aidl的 Add.java 类
   
 	/build/generated/aidl_source_output_dir/debug/compileDebugAidl/out
+
+代码如下：
 
 	/*
 	 * This file is auto-generated.  DO NOT MODIFY.
