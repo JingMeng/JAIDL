@@ -432,3 +432,4 @@ AIDL是Android Interface Definition Languagee的缩写。从名称看它是一�
 * [基本使用](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn)
 * 《Android艺术开发探索》
 * 《深入理解Android内核设计思想》
+* [源码地址](https://github.com/JingMeng/JAIDL)
