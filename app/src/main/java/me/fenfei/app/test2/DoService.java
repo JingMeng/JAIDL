@@ -18,7 +18,7 @@ public class DoService extends Service {
         if (null == mStubBinder) {
             mStubBinder = new StubBinder();
         }
-        return mStubBinder;
+        return mStubBinder.asBinder();
     }
 
     class StubBinder extends Add.Stub {

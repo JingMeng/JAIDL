@@ -423,3 +423,12 @@ AIDL是Android Interface Definition Languagee的缩写。从名称看它是一�
 可以看到在跨进程通讯的时候，我们得到的不是原始对象，而是一个代理对象，这个代理对象作为一个中间桥梁帮助我们进行通讯
     
 还有另外一条是，在跨进程，多app的时候，我们是获取不到DoService这个类的，这个类只存在某一个apk中
+
+资料
+
+> [官网介绍地址](https://stuff.mit.edu/afs/sipb/project/android/docs/guide/components/processes-and-threads.html)
+> [绑定服务概览](https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn)
+> [Parcelable 和 Bundle](https://developer.android.google.cn/guide/components/activities/parcelables-and-bundles?hl=zh-cn)
+> [基本使用](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn)
+> 《Android艺术开发探索》
+> 《深入理解Android内核设计思想》
