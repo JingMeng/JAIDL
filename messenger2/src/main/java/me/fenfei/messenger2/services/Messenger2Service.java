@@ -41,6 +41,10 @@ public class Messenger2Service extends Service {
                     Toast.makeText(applicationContext, "hello!hello!", Toast.LENGTH_SHORT).show();
                     //   java.lang.ClassNotFoundException: me.fenfei.messenger.pojo.Student
                     Bundle data = msg.getData();
+//                    多设置一个步骤
+                    //   android.os.BadParcelableException: ClassNotFoundException when unmarshalling: me.fenfei.messenger.pojo.Student
+                    //加上下面的这句话，就会产生另外一个报错，也就是上面的报错
+                    data.setClassLoader(Student.class.getClassLoader());
                     Student student = data.getParcelable("msg");
                     Log.i(TAG, student + "");
                     break;

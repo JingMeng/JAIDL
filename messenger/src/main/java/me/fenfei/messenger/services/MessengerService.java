@@ -41,6 +41,8 @@ public class MessengerService extends Service {
                     Toast.makeText(applicationContext, "hello!hello!", Toast.LENGTH_SHORT).show();
                     //   java.lang.ClassNotFoundException: me.fenfei.messenger.pojo.Student
                     Bundle data = msg.getData();
+                    //按照方案代码，一下子就可以做到
+                    data.setClassLoader(Student.class.getClassLoader());
                     Student student = data.getParcelable("msg");
                     Log.i(TAG, student + "");
                     break;

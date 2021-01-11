@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -21,6 +22,8 @@ import android.view.View;
  * https://juejin.cn/post/6844903665795334158
  */
 public class MessengerMainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MessengerMainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class MessengerMainActivity extends AppCompatActivity {
         // Create and send a message to the service, using a supported 'what' value
         Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO2, 0, 0);
         Bundle bundle = new Bundle();
+
         bundle.putParcelable("msg", new Student("zyy"));
         msg.setData(bundle);
         try {
@@ -95,11 +99,12 @@ public class MessengerMainActivity extends AppCompatActivity {
             bindService(intent, mConnection,
                     Context.BIND_AUTO_CREATE);
         } else {
-            ComponentName componentName = new ComponentName("me.fenfei.messenger2.services", "me.fenfei.messenger2.services.Messenger2Service");
+            ComponentName componentName = new ComponentName("me.fenfei.messenger2", "me.fenfei.messenger2.services.Messenger2Service");
             Intent intent = new Intent();
             intent.setComponent(componentName);
-            bindService(intent, mConnection,
+            boolean success = bindService(intent, mConnection,
                     Context.BIND_AUTO_CREATE);
+            Log.i(TAG,success+"==============");
         }
     }
 
