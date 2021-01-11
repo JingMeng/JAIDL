@@ -1,2 +1,2 @@
-include ':app', ':messenger'
+include ':app', ':messenger', ':messenger2'
 rootProject.name='app'

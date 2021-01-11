@@ -1,4 +1,4 @@
-package me.fenfei.messenger.services;
+package me.fenfei.messenger2.services;
 
 import android.app.Service;
 import android.content.Context;
@@ -11,9 +11,9 @@ import android.os.Messenger;
 import android.util.Log;
 import android.widget.Toast;
 
-import me.fenfei.messenger.pojo.Student;
+import me.fenfei.messenger2.pojo.Student;
 
-public class MessengerService extends Service {
+public class Messenger2Service extends Service {
     /**
      * Command to the service to display a message
      */

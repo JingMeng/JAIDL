@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.fenfei.messenger">
+    package="me.fenfei.messenger2">
 
     <application
         android:allowBackup="true"
@@ -11,22 +11,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ActivityMessenger">
-
-        </activity>
-        <activity android:name=".MessengerMainActivity">
+        <activity android:name=".Messenger2Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <service
-            android:name="me.fenfei.messenger.services.MessengerService"
+            android:name="me.fenfei.messenger2.services.Messenger2Service"
             android:enabled="true"
-            android:exported="true"
-            android:process=".zyy" />
+            android:exported="true" />
     </application>
 
 </manifest>
