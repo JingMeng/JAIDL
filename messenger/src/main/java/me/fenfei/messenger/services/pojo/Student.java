@@ -24,7 +24,7 @@ public class Student implements Parcelable {
     protected Student(Parcel in) {
         this.name = in.readString();
     }
-
+//    Interface that must be implemented and provided as a public CREATOR field that generates instances of your Parcelable class from a Parcel.
     public static final Creator<Student> CREATOR = new Creator<Student>() {
         @Override
         public Student createFromParcel(Parcel source) {
