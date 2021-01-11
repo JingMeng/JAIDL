@@ -11,7 +11,7 @@ import android.os.Messenger;
 import android.util.Log;
 import android.widget.Toast;
 
-import me.fenfei.messenger.pojo.Student;
+import me.fenfei.messenger.services.pojo.Student;
 
 public class MessengerService extends Service {
     /**
@@ -39,7 +39,7 @@ public class MessengerService extends Service {
                     break;
                 case MSG_SAY_HELLO2:
                     Toast.makeText(applicationContext, "hello!hello!", Toast.LENGTH_SHORT).show();
-                    //   java.lang.ClassNotFoundException: me.fenfei.messenger.pojo.Student
+                    //   java.lang.ClassNotFoundException: me.fenfei.messenger.services.pojo.Student
                     Bundle data = msg.getData();
                     //按照方案代码，一下子就可以做到
                     data.setClassLoader(Student.class.getClassLoader());

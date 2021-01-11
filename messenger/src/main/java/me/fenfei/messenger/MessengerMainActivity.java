@@ -1,7 +1,7 @@
 package me.fenfei.messenger;
 
 import androidx.appcompat.app.AppCompatActivity;
-import me.fenfei.messenger.pojo.Student;
+import me.fenfei.messenger.services.pojo.Student;
 import me.fenfei.messenger.services.MessengerService;
 
 import android.content.ComponentName;
