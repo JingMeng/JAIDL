@@ -79,6 +79,7 @@ public class MessengerMainActivity extends AppCompatActivity {
         Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO2, 0, 0);
         Bundle bundle = new Bundle();
 
+        Log.i("IncomingHandler", Student.class.getClassLoader() + "===");
         bundle.putParcelable("msg", new Student("zyy"));
         msg.setData(bundle);
         try {
@@ -94,7 +95,7 @@ public class MessengerMainActivity extends AppCompatActivity {
         super.onStart();
         // Bind to the service
 
-        if (true) {
+        if (false) {
             Intent intent = new Intent(this, MessengerService.class);
             bindService(intent, mConnection,
                     Context.BIND_AUTO_CREATE);
@@ -104,7 +105,7 @@ public class MessengerMainActivity extends AppCompatActivity {
             intent.setComponent(componentName);
             boolean success = bindService(intent, mConnection,
                     Context.BIND_AUTO_CREATE);
-            Log.i(TAG,success+"==============");
+            Log.i(TAG, success + "==============");
         }
     }
 
