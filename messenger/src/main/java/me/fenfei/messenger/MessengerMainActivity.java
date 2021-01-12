@@ -83,6 +83,7 @@ public class MessengerMainActivity extends AppCompatActivity {
         Log.i("IncomingHandler", Student.class.getClassLoader() + "===");
         bundle.putParcelable("msg", new Student("zyy"));
         msg.setData(bundle);
+        msg.obj = new Student("zqq");
         try {
             mService.send(msg);
         } catch (RemoteException e) {
@@ -96,7 +97,7 @@ public class MessengerMainActivity extends AppCompatActivity {
         super.onStart();
         // Bind to the service
 
-        if (false) {
+        if (true) {
             Intent intent = new Intent(this, MessengerService.class);
             bindService(intent, mConnection,
                     Context.BIND_AUTO_CREATE);
