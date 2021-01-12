@@ -82,8 +82,10 @@ public class MessengerMainActivity extends AppCompatActivity {
 
         Log.i("IncomingHandler", Student.class.getClassLoader() + "===");
         bundle.putParcelable("msg", new Student("zyy"));
+
         msg.setData(bundle);
-        msg.obj = new Student("zqq");
+        //加上这个就会报错
+//        msg.obj = new Student("zqq");
         try {
             mService.send(msg);
         } catch (RemoteException e) {
