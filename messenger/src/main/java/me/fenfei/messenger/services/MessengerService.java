@@ -11,7 +11,7 @@ import android.os.Messenger;
 import android.util.Log;
 import android.widget.Toast;
 
-import me.fenfei.messenger.services.pojo.Student;
+import me.fenfei.messenger.services.aidl.Student;
 
 public class MessengerService extends Service {
     /**
@@ -39,7 +39,7 @@ public class MessengerService extends Service {
                     break;
                 case MSG_SAY_HELLO2:
                     Toast.makeText(applicationContext, "hello!hello!", Toast.LENGTH_SHORT).show();
-                    //   java.lang.ClassNotFoundException: me.fenfei.messenger.services.pojo.Student
+                    //   java.lang.ClassNotFoundException: me.fenfei.messenger.services.aidl.Student
                     try {
                         Bundle data = msg.getData();
                         //这就是报错的原因

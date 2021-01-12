@@ -1,4 +1,4 @@
-package me.fenfei.messenger.services.pojo;
+package me.fenfei.messenger.services.aidl;
 
 import android.os.Parcel;
 import android.os.Parcelable;

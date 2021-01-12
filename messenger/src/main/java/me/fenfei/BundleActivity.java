@@ -2,7 +2,7 @@ package me.fenfei;
 
 import androidx.appcompat.app.AppCompatActivity;
 import me.fenfei.messenger.R;
-import me.fenfei.messenger.services.pojo.Student;
+import me.fenfei.messenger.services.aidl.Student;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +32,7 @@ public class BundleActivity extends AppCompatActivity {
 
             Log.i(TAG, defaultLoader + "============" + parcelableClass+"==========="+studentLoader);
         } catch (Exception e) {
-            //: java.lang.ClassNotFoundException: me.fenfei.messenger.services.pojo.Student
+            //: java.lang.ClassNotFoundException: me.fenfei.messenger.services.aidl.Student
             e.printStackTrace();
         }
 
