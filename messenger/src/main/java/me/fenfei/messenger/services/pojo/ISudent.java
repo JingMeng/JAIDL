@@ -5,6 +5,8 @@ package me.fenfei.messenger.services.pojo;
 // Declare any non-default types here with import statements
 //https://blog.csdn.net/nei504293736/article/details/94834528
 
+import me.fenfei.messenger.services.aidl.Student;
+
 public interface ISudent extends android.os.IInterface {
     /**
      * Local-side IPC implementation stub class.
@@ -49,9 +51,9 @@ public interface ISudent extends android.os.IInterface {
                 }
                 case TRANSACTION_print: {
                     data.enforceInterface(descriptor);
-                    me.fenfei.messenger.services.aidl.Student _arg0;
+                    Student _arg0;
                     if ((0 != data.readInt())) {
-                        _arg0 = me.fenfei.messenger.services.aidl.Student.CREATOR.createFromParcel(data);
+                        _arg0 = Student.CREATOR.createFromParcel(data);
                     } else {
                         _arg0 = null;
                     }
@@ -82,7 +84,7 @@ public interface ISudent extends android.os.IInterface {
             }
 
             @Override
-            public void print(me.fenfei.messenger.services.aidl.Student student) throws android.os.RemoteException {
+            public void print(Student student) throws android.os.RemoteException {
                 android.os.Parcel _data = android.os.Parcel.obtain();
                 android.os.Parcel _reply = android.os.Parcel.obtain();
                 try {
@@ -105,5 +107,5 @@ public interface ISudent extends android.os.IInterface {
         static final int TRANSACTION_print = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
     }
 
-    public void print(me.fenfei.messenger.services.aidl.Student student) throws android.os.RemoteException;
+    public void print(Student student) throws android.os.RemoteException;
 }
