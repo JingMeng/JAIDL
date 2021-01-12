@@ -11,19 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ActivityMessenger">
-
-        </activity>
-        <activity android:name=".MessengerMainActivity">
+        <activity android:name="me.fenfei.BundleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ActivityMessenger"></activity>
+        <activity android:name=".MessengerMainActivity">
+
+        </activity>
 
         <service
-            android:name="me.fenfei.messenger.services.MessengerService"
+            android:name=".services.MessengerService"
             android:enabled="true"
             android:exported="true"
             android:process=".zyy" />
