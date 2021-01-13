@@ -14,6 +14,10 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.view.View;
 
+/**
+ * https://developer.android.google.cn/guide/components/aidl?hl=zh_cn
+ * 这个地方在补充，补充
+ */
 public class ActivityMessenger extends AppCompatActivity {
 
     @Override
