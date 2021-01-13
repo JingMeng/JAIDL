@@ -88,8 +88,7 @@ public class MessengerService extends Service {
                     mValue = msg.arg1;
                     for (int i=mClients.size()-1; i>=0; i--) {
                         try {
-                            mClients.get(i).send(Message.obtain(null,
-                                    MSG_SET_VALUE, mValue, 0));
+                            mClients.get(i).send(Message.obtain(null, MSG_SET_VALUE, mValue, 0));
                         } catch (RemoteException e) {
                             // The client is dead.  Remove it from the list;
                             // we are going through the list from back to front
