@@ -2,6 +2,16 @@
 
 https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn#Messenger
 
+
+https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn
+
+
+这个地方是存在提示的
+带软件包参数（包含 Parcelable 类型）的方法
+如果您的 AIDL 接口包含接收软件包作为参数（预计包含 Parcelable 类型）的方法，则在尝试从软件包读取之前，请务必通过调用 Bundle.setClassLoader(ClassLoader) 设置软件包的类加载器。否则，即使您在应用中正确定义 Parcelable 类型，也会遇到 ClassNotFoundException。例如，
+https://developer.android.google.cn/guide/components/aidl?hl=zh_cn
+
+
 为接口使用 Messenger 比使用 AIDL 更简单，因为 Messenger 会将所有服务调用加入队列。纯 AIDL 接口会同时向服务发送多个请求，那么服务就必须执行多线程处理。
 对于大多数应用，服务无需执行多线程处理，因此使用 Messenger 可让服务一次处理一个调用。如果您的服务必须执行多线程处理，请使用 AIDL 来定义接口。
 
@@ -172,4 +182,4 @@ onServiceConnected 的时候创建我们的消息传递对象
 
 
 
-
+##使用 classLoader的问题
