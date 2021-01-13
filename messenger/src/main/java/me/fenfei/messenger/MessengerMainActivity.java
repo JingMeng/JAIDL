@@ -79,9 +79,9 @@ public class MessengerMainActivity extends AppCompatActivity {
         // Create and send a message to the service, using a supported 'what' value
         Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO2, 0, 0);
         Bundle bundle = new Bundle();
+        bundle.putParcelable("msg", new Student("zyy"));
 
         Log.i("IncomingHandler", Student.class.getClassLoader() + "===");
-        bundle.putParcelable("msg", new Student("zyy"));
 
         msg.setData(bundle);
         //加上这个就会报错
