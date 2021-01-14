@@ -33,7 +33,7 @@
  
 
 
-###1.1[关于Messenger和AIDL的比较](https://developer.android.google.cn/guide/components/bound-services#Creating)
+### 1.2[关于Messenger和AIDL的比较](https://developer.android.google.cn/guide/components/bound-services#Creating)
 
 Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger 会在单个线程中创建包含所有请求的队列，这样您就不必对服务进行线程安全设计。
 
@@ -43,7 +43,7 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
 大多数应用不应使用 AIDL 来创建绑定服务，因为它可能需要多线程处理能力，并可能导致更为复杂的实现。
 
 
-##2 [使用Messenger](https://developer.android.google.cn/guide/components/bound-services?#Messenger)
+## 2 [使用Messenger](https://developer.android.google.cn/guide/components/bound-services?#Messenger)
 
 如需让接口跨不同进程工作，您可以使用 Messenger 为服务创建接口。采用这种方式时，服务会定义一个 Handler，用于响应不同类型的 Message 对象。此 Handler 是 Messenger 的基础，后者随后可与客户端分享一个 IBinder，以便客户端能利用 Message 对象向服务发送命令。
 此外，客户端还可定义一个自有 Messenger，以便服务回传消息。
@@ -62,7 +62,7 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
 下面这个简单的服务实例展示了如何使用 Messenger 接口：
 
 
-###2.1. server
+### 2.1. server
 
     static class IncomingHandler extends Handler{
         @Override
@@ -71,7 +71,7 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
         }
     }
    
-###2.2.server
+### 2.2.server
 
     /**
      * Target we publish for clients to send messages to IncomingHandler.
@@ -90,7 +90,7 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
     }
     
 
-###2.3. client
+### 2.3. client
 
 在需要的时候bindService
 	
@@ -134,7 +134,7 @@ onServiceConnected 的时候创建我们的消息传递对象
 	 }
 
 	
-###2.4.client
+### 2.4.client
 
 调用
  
@@ -161,7 +161,7 @@ onServiceConnected 的时候创建我们的消息传递对象
     msg.obj = new Student("zyy");   
   
      
-###2.5.如果想要双向消息传递：
+### 2.5.如果想要双向消息传递：
   
 需要在client添加
  
@@ -212,10 +212,10 @@ server可以按照官方的交互进行模板代码书写
 
 
 
-##3.注意事项：
+## 3.注意事项：
 
 
-###3.1使用 classLoader的问题
+### 3.1使用 classLoader的问题
 
 1.1关于Parcelable中我们说：
   在使用budler的时候请务必通过调用 Bundle.setClassLoader(ClassLoader) 设置软件包的类加载器。否则，即使您在应用中正确定义 Parcelable类型，也会遇到 ClassNotFoundException
@@ -256,7 +256,7 @@ server可以按照官方的交互进行模板代码书写
   
  
  
-###3.2使用 AIDL与当前Parcelable实现类的位置要求比较
+### 3.2使用 AIDL与当前Parcelable实现类的位置要求比较
 
 
 在不同的apk中，要求我们所传递的Parcelable实现类，限定名(包名+类名)要完全一致
