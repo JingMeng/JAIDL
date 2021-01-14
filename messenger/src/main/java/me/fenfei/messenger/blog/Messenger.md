@@ -1,9 +1,9 @@
-#Messenger学习，理解
+# Messenger学习，理解
 
 
-##1.基本知识
+## 1.基本知识
 
-###1.1关于Parcelable
+### 1.1关于Parcelable
  
   如果仅仅是简单的传递8中基本类型，没有什么好说，但是我们要传递对象，就不得不说Parcelable，为此在学习Messenger之前我们需要再次了解一下[Parcelable](https://developer.android.google.cn/guide/components/aidl#Bundles)
 
