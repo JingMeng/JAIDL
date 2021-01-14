@@ -62,15 +62,17 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
 下面这个简单的服务实例展示了如何使用 Messenger 接口：
 
 
-1. server
-   static class IncomingHandler extends Handler{
-       @Override
-       public void handleMessage(Message msg) {
-           super.handleMessage(msg);
-       }
-   }
+###2.1. server
+
+    static class IncomingHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    }
    
-2.server
+###2.2.server
+
     /**
      * Target we publish for clients to send messages to IncomingHandler.
      */
@@ -88,150 +90,155 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
     }
     
 
-3. client
+###2.3. client
+
 在需要的时候bindService
-bindService(intent, mConnection,Context.BIND_AUTO_CREATE);
+	
+	bindService(intent, mConnection,Context.BIND_AUTO_CREATE);
 
 onServiceConnected 的时候创建我们的消息传递对象
-   /**
-    * Class for interacting with the main interface of the service.
-    */
-   private ServiceConnection mConnection = new ServiceConnection() {
-       @Override
-       public void onServiceConnected(ComponentName className, IBinder service) {
-           // This is called when the connection with the service has been
-           // established, giving us the object we can use to
-           // interact with the service.  We are communicating with the
-           // service using a Messenger, so here we get a client-side
-           // representation of that from the raw IBinder object.
-           mService = new Messenger(service);
-           bound = true;
-       }
-       @Override
-       public void onServiceDisconnected(ComponentName className) {
-           // This is called when the connection with the service has been
-           // unexpectedly disconnected -- that is, its process crashed.
-           mService = null;
-           bound = false;
-       }
-   };
 
-
-
+    /**
+     * Class for interacting with the main interface of the service.
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // This is called when the connection with the service has been
+            // established, giving us the object we can use to
+            // interact with the service.  We are communicating with the
+            // service using a Messenger, so here we get a client-side
+            // representation of that from the raw IBinder object.
+            mService = new Messenger(service);
+            bound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName className) {
+            // This is called when the connection with the service has been
+            // unexpectedly disconnected -- that is, its process crashed.
+            mService = null;
+            bound = false;
+        }
+    };
 
 记得及时回收资源
- @Override
- protected void onStop() {
-     super.onStop();
-     // Unbind from the service
-     if (bound) {
-         unbindService(mConnection);
-         bound = false;
-     }
- }
 
-4.client
+	 @Override
+	 protected void onStop() {
+	     super.onStop();
+	     // Unbind from the service
+	     if (bound) {
+	         unbindService(mConnection);
+	         bound = false;
+	     }
+	 }
+
+	
+###2.4.client
 
 调用
-  Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO2, 0, 0);
  
- mService.send(msg);
+    Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO2, 0, 0);
  
- 传递对象参数
-  Bundle bundle = new Bundle();
-   bundle.putParcelable("msg", new Student("zyy"));
-   msg.setData(bundle);
-   或者
- Bundle bundle = new Bundle();
-  bundle.putParcelable("msg", new Student("zyy"));
-  msg.obj = bundle;
+    mService.send(msg);
+ 
+传递对象参数
+ 
+    Bundle bundle = new Bundle();
+    bundle.putParcelable("msg", new Student("zyy"));
+    msg.setData(bundle);
+
+或者
+
+    Bundle bundle = new Bundle();
+    bundle.putParcelable("msg", new Student("zyy"));
+    msg.obj = bundle;
   
-  但是不能：
+但是不能：
   
-  Bundle bundle = new Bundle();
-  bundle.putParcelable("msg", new Student("zyy"));
-  msg.obj = new Student("zyy");   
+    Bundle bundle = new Bundle();
+    bundle.putParcelable("msg", new Student("zyy"));
+    msg.obj = new Student("zyy");   
   
      
-5.如果想要双向消息传递：
+###2.5.如果想要双向消息传递：
   
-  需要在client添加
-  /**
-    * Target we publish for clients to send messages to IncomingHandler.
-    */
-   final Messenger mMessenger = new Messenger(new IncomingHandler());
-
-  并且在发送消息的时候，把当前对象一起传递出去
-  Message msg = Message.obtain(null,MessengerService.MSG_REGISTER_CLIENT);
-  msg.replyTo = mMessenger;
-
- server可以按照官方的交互进行模板代码书写
-   /** Keeps track of all current registered clients. */
-     ArrayList<Messenger> mClients = new ArrayList<Messenger>();
-     
-   class IncomingHandler extends Handler {
-       @Override
-       public void handleMessage(Message msg) {
-           switch (msg.what) {
-               case MSG_REGISTER_CLIENT:
-                   mClients.add(msg.replyTo);
-                   break;
-               case MSG_UNREGISTER_CLIENT:
-                   mClients.remove(msg.replyTo);
-                   break;
-               case MSG_SET_VALUE:
-               //这个可以根据实际情况进行相应的回调回传消息
-                   mValue = msg.arg1;
-                   for (int i=mClients.size()-1; i>=0; i--) {
-                       try {
-                           mClients.get(i).send(Message.obtain(null, MSG_SET_VALUE, mValue, 0));
-                       } catch (RemoteException e) {
-                           // The client is dead.  Remove it from the list;
-                           // we are going through the list from back to front
-                           // so this is safe to do inside the loop.
-                           mClients.remove(i);
-                       }
-                   }
-                   break;
-               default:
-                   super.handleMessage(msg);
-           }
-       }
-   }
-
-
-
-##注意事项：
-
-
-###使用 classLoader的问题
-
-
-
-
-在使用budler的时候请务必通过调用 Bundle.setClassLoader(ClassLoader) 设置软件包的类加载器。
-否则，即使您在应用中正确定义 Parcelable
-类型，也会遇到 ClassNotFoundException
-
-
-        bundle.setClassLoader(getClass().getClassLoader());
-        Rect rect = bundle.getParcelable("rect");
-        process(rect); // Do more with the parcelable.
+需要在client添加
  
- 这一点是可以在[带软件包参数（包含 Parcelable 类型）的方法](https://developer.android.google.cn/guide/components/aidl?hl=zh_cn) 中查阅到说明
+    /**
+     * Target we publish for clients to send messages to IncomingHandler.
+     */
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
+
+并且在发送消息的时候，把当前对象一起传递出去
+
+	  Message msg = Message.obtain(null,MessengerService.MSG_REGISTER_CLIENT);
+	  msg.replyTo = mMessenger;
+
+server可以按照官方的交互进行模板代码书写
+
+    /** Keeps track of all current registered clients. */
+      ArrayList<Messenger> mClients = new ArrayList<Messenger>();
+      
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_REGISTER_CLIENT:
+                    mClients.add(msg.replyTo);
+                    break;
+                case MSG_UNREGISTER_CLIENT:
+                    mClients.remove(msg.replyTo);
+                    break;
+                case MSG_SET_VALUE:
+                //这个可以根据实际情况进行相应的回调回传消息
+                    mValue = msg.arg1;
+                    for (int i=mClients.size()-1; i>=0; i--) {
+                        try {
+                            mClients.get(i).send(Message.obtain(null, MSG_SET_VALUE, mValue, 0));
+                        } catch (RemoteException e) {
+                            // The client is dead.  Remove it from the list;
+                            // we are going through the list from back to front
+                            // so this is safe to do inside the loop.
+                            mClients.remove(i);
+                        }
+                    }
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
+
+
+##3.注意事项：
+
+
+###3.1使用 classLoader的问题
+
+1.1关于Parcelable中我们说：
+  在使用budler的时候请务必通过调用 Bundle.setClassLoader(ClassLoader) 设置软件包的类加载器。否则，即使您在应用中正确定义 Parcelable类型，也会遇到 ClassNotFoundException
+
+    bundle.setClassLoader(getClass().getClassLoader());
+    Rect rect = bundle.getParcelable("rect");
+    process(rect); // Do more with the parcelable.
+
+  todo
+	
  
- 
-###使用 AIDL与当前Parcelable实现类的位置要求比较
+###3.2使用 AIDL与当前Parcelable实现类的位置要求比较
 
 
 在不同的apk中，要求我们所传递的Parcelable实现类，限定名(包名+类名)要完全一致
+ 
  这个可以在以下代码中体现
  
  
- 另外Parcelable的书写也是有严格的要求的，在代码中也有体现https://developer.android.google.cn/reference/android/os/Parcelable?hl=zh-cn
- 
-   Bundle bundle = new Bundle();
-   bundle.putParcelable("msg", new Student("zyy"));
+ 另外[Parcelable](https://developer.android.google.cn/reference/android/os/Parcelable)的书写也是有严格的要求的，在代码中也有体现
+
+    Bundle bundle = new Bundle();
+    bundle.putParcelable("msg", new Student("zyy"));
 
   
  public void putParcelable(@Nullable String key, @Nullable Parcelable value) {
