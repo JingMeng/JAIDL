@@ -224,19 +224,43 @@ server可以按照官方的交互进行模板代码书写
     Rect rect = bundle.getParcelable("rect");
     process(rect); // Do more with the parcelable.
 
-  todo
-	
+  
+ [通过 IPC 传递对象](https://developer.android.google.cn/guide/components/aidl#PassingObjects)
+ 您可以通过 IPC 接口，将某个类从一个进程发送至另一个进程。不过，您必须确保 IPC 通道的另一端可使用该类的代码，并且该类必须支持 Parcelable 接口。支持 Parcelable 接口很重要，因为 Android 系统能通过该接口将对象分解成可编组至各进程的基本对象。
+ 
+ 如要创建支持 Parcelable 协议的类，您必须执行以下操作：
+ 
+- 让您的类实现 Parcelable 接口。
+- 实现 writeToParcel，它会获取对象的当前状态并将其写入 Parcel。
+- 为您的类添加 CREATOR 静态字段，该字段是实现 Parcelable.Creator 接口的对象。
+> 最后，创建声明 Parcelable 类的 .aidl 文件（遵照下文 Rect.aidl 文件所示步骤）。
+> 如果您使用的是自定义编译进程，请勿在您的构建中添加 .aidl 文件。此 .aidl 文件与 C 语言中的头文件类似，并未经过编译。
+
+ AIDL 会在其生成的代码中使用这些方法和字段，以对您的对象进行编组和解编。
+ 
+ 例如，下方的 Rect.aidl 文件可创建 Parcelable 类型的 Rect 类：
+
+	 package android.graphics;
+	 
+	 // Declare Rect so AIDL can find it and knows that it implements
+	 // the parcelable protocol.
+	 parcelable Rect;
+	 
+在aidl的时候，编译器已经帮我们检查了，而且代码是最新生成的，属于同一个加载器，进而没有这么多的问题
+
+ todo 父类委托机制添加解析
+
+  
+  
+  为什么要使用classforename带加载器的，而不是不带的，这集考虑到父类加载机制了
+  
+ 
  
 ###3.2使用 AIDL与当前Parcelable实现类的位置要求比较
 
 
 在不同的apk中，要求我们所传递的Parcelable实现类，限定名(包名+类名)要完全一致
- 
- 这个可以在以下代码中体现
- 
- 
- 另外[Parcelable](https://developer.android.google.cn/reference/android/os/Parcelable)的书写也是有严格的要求的，在代码中也有体现
- 实现Parcelable接口的类还必须具有一个称为CREATOR的非空静态字段，该字段的类型应实现Parcelable.Creator接口。
+
 
     Bundle bundle = new Bundle();
     bundle.putParcelable("msg", new Student("zyy"));
@@ -443,37 +467,7 @@ server可以按照官方的交互进行模板代码书写
   
   
   
-  
-  
-  为什么要使用classforename带加载器的，而不是不带的，这集考虑到父类加载机制了
-  
-  
-  
- 
- 
- 通过 IPC 传递对象
- 您可以通过 IPC 接口，将某个类从一个进程发送至另一个进程。不过，您必须确保 IPC 通道的另一端可使用该类的代码，并且该类必须支持 Parcelable 接口。支持 Parcelable 接口很重要，因为 Android 系统能通过该接口将对象分解成可编组至各进程的原语。
- 
- 如要创建支持 Parcelable 协议的类，您必须执行以下操作：
- 
- 让您的类实现 Parcelable 接口。
- 实现 writeToParcel，它会获取对象的当前状态并将其写入 Parcel。
- 为您的类添加 CREATOR 静态字段，该字段是实现 Parcelable.Creator 接口的对象。
- 最后，创建声明 Parcelable 类的 .aidl 文件（遵照下文 Rect.aidl 文件所示步骤）。
- 如果您使用的是自定义编译进程，请勿在您的构建中添加 .aidl 文件。此 .aidl 文件与 C 语言中的头文件类似，并未经过编译。
- 
- AIDL 会在其生成的代码中使用这些方法和字段，以对您的对象进行编组和解编。
- 
- 例如，下方的 Rect.aidl 文件可创建 Parcelable 类型的 Rect 类：
- 
- 
- package android.graphics;
- 
- // Declare Rect so AIDL can find it and knows that it implements
- // the parcelable protocol.
- parcelable Rect;
- 
- 在aidl的时候，编译器已经帮我们检查了，而且代码是最新生成的，属于同一个加载器，进而没有这么多的问题
+
  
   
   
