@@ -236,23 +236,26 @@ server可以按照官方的交互进行模板代码书写
  
  
  另外[Parcelable](https://developer.android.google.cn/reference/android/os/Parcelable)的书写也是有严格的要求的，在代码中也有体现
+ 实现Parcelable接口的类还必须具有一个称为CREATOR的非空静态字段，该字段的类型应实现Parcelable.Creator接口。
 
     Bundle bundle = new Bundle();
     bundle.putParcelable("msg", new Student("zyy"));
 
   
- public void putParcelable(@Nullable String key, @Nullable Parcelable value) {
-      unparcel();
-      mMap.put(key, value);
-      mFlags &= ~FLAG_HAS_FDS_KNOWN;
-  }
+    public void putParcelable(@Nullable String key, @Nullable Parcelable value) {
+         unparcel();
+         mMap.put(key, value);
+         mFlags &= ~FLAG_HAS_FDS_KNOWN;
+     }
+从上面的代码，我们似乎也没有看见，最后的处理过程，具体的回调等方法，那我们继续往下看：
+看一下Bundle方法会发现，他也是一个Parcelable对象：
 
-public final class Bundle extends BaseBundle implements Cloneable, Parcelable
+	public final class Bundle extends BaseBundle implements Cloneable, Parcelable
 
-writeToParcel
+我们可以看看他的writeToParcel是如何实现的
 
-
-  @Override
+	Bundle#writeToParcel
+    @Override
     public void writeToParcel(Parcel parcel, int flags) {
         final boolean oldAllowFds = parcel.pushAllowFds((mFlags & FLAG_ALLOW_FDS) != 0);
         try {
@@ -262,7 +265,9 @@ writeToParcel
         }
     }
 
- void writeToParcelInner(Parcel parcel, int flags) {
+ 	BaseBundle#writeToParcelInner
+    void writeToParcelInner(Parcel parcel, int flags) {
+		//省掉了部分代码
         if (map == null || map.size() <= 0) {
             parcel.writeInt(0);
             return;
@@ -283,43 +288,47 @@ writeToParcel
         parcel.setDataPosition(endPos);
     }
 
+	Parcel#writeValue
+	public final void writeValue(Object v) {
+	      if (v instanceof Parcelable) {
+	            // IMPOTANT: cases for classes that implement Parcelable must
+	            // come before the Parcelable case, so that their specific VAL_*
+	            // types will be written.
+	            writeInt(VAL_PARCELABLE);
+	            writeParcelable((Parcelable) v, 0);
+	        } 
+	 }
 
-public final void writeValue(Object v) {
-      if (v instanceof Parcelable) {
-            // IMPOTANT: cases for classes that implement Parcelable must
-            // come before the Parcelable case, so that their specific VAL_*
-            // types will be written.
-            writeInt(VAL_PARCELABLE);
-            writeParcelable((Parcelable) v, 0);
-        } 
-    }
+	 Parcel#writeParcelable
+	 public final void writeParcelable(Parcelable p, int parcelableFlags) {
+	     if (p == null) {
+	         writeString(null);
+	         return;
+	     }
+	     writeParcelableCreator(p);
+	     //回调我们自己的写法
+	     p.writeToParcel(this, parcelableFlags);
+	 }
+  
+ 	 Parcel#writeParcelableCreator
+	  //限定了类的信息(包名+类名字)
+	  /** @hide */
+	  public final void writeParcelableCreator(Parcelable p) {
+	      String name = p.getClass().getName();
+	      writeString(name);
+	  }  
+  
+  
+	获取
 
- public final void writeParcelable(Parcelable p, int parcelableFlags) {
-     if (p == null) {
-         writeString(null);
-         return;
-     }
-     writeParcelableCreator(p);
-     //回调我们自己的写法
-     p.writeToParcel(this, parcelableFlags);
- }
-  
-  //限定了类的信息
-  /** @hide */
-  public final void writeParcelableCreator(Parcelable p) {
-      String name = p.getClass().getName();
-      writeString(name);
-  }  
-  
-  
     Bundle bundle = new Bundle();
-   bundle.getParcelable("student");
+    bundle.getParcelable("student");
   
         
-        在跨进程传递时候，应该是从这个地方回复的
+     在跨进程传递时候，应该是从这个地方产生的数据
      BaseBundle(Parcel parcelledData) {
             readFromParcelInner(parcelledData);
-        }
+     }
     
         BaseBundle(Parcel parcelledData, int length) {
             readFromParcelInner(parcelledData, length);
@@ -330,21 +339,19 @@ public final void writeValue(Object v) {
          Object value = readValue(loader);
     }
     
-       public final <T extends Parcelable> T readParcelable(ClassLoader loader) {
-           Parcelable.Creator<?> creator = readParcelableCreator(loader);
-           if (creator == null) {
-               return null;
-           }
-           if (creator instanceof Parcelable.ClassLoaderCreator<?>) {
-             Parcelable.ClassLoaderCreator<?> classLoaderCreator =
-                 (Parcelable.ClassLoaderCreator<?>) creator;
-             return (T) classLoaderCreator.createFromParcel(this, loader);
-           }
-           //回调我们的方法
-           return (T) creator.createFromParcel(this);
-       }
-
-
+    public final <T extends Parcelable> T readParcelable(ClassLoader loader) {
+        Parcelable.Creator<?> creator = readParcelableCreator(loader);
+        if (creator == null) {
+            return null;
+        }
+        if (creator instanceof Parcelable.ClassLoaderCreator<?>) {
+          Parcelable.ClassLoaderCreator<?> classLoaderCreator =
+              (Parcelable.ClassLoaderCreator<?>) creator;
+          return (T) classLoaderCreator.createFromParcel(this, loader);
+        }
+        //回调我们的方法
+        return (T) creator.createFromParcel(this);
+    }
 
 
     /** @hide */
@@ -419,11 +426,9 @@ public final void writeValue(Object v) {
     }
 
 
-
   一些列的检查，排查类的存在等条件，在这个地方出现了类加载器的概念
   
-  
-  
+   
        Bundle data = msg.getData();
        或者
        Bundle data = msg.obj;
