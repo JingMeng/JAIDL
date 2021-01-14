@@ -1,40 +1,60 @@
+#Messenger学习，理解
 
 
-https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn#Messenger
+##1.基本知识
+
+###1.1关于Parcelable
+ 
+  如果仅仅是简单的传递8中基本类型，没有什么好说，但是我们要传递对象，就不得不说Parcelable，为此在学习Messenger之前我们需要再次了解一下[Parcelable](https://developer.android.google.cn/guide/components/aidl#Bundles)
+
+  在使用`.aidl`文件的时候---`通过bundle传递`，我们需要按照下面的格式
+
+	// IRectInsideBundle.aidl
+	package com.example.android;
+	
+	/** Example service interface */
+	interface IRectInsideBundle {
+	    /** Rect parcelable is stored in the bundle with key "rect" */
+	    void saveRect(in Bundle bundle);
+	}
+
+	
+	private final IRectInsideBundle.Stub binder = new IRectInsideBundle.Stub() {
+	    public void saveRect(Bundle bundle){
+	        bundle.setClassLoader(getClass().getClassLoader());
+	        Rect rect = bundle.getParcelable("rect");
+	        process(rect); // Do more with the parcelable.
+	    }
+	};
+
+ 也就是需要特殊处理处理一下ClassLoader的问题，不然我们讲得到一个异常`ClassNotFoundException`
+ 
+ 在使用Messenger的时候我们同样也需要规避这个问题，我们将在后面进行讨论这是为什么。
+ 
 
 
-https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn
+###1.1[关于Messenger和AIDL的比较](https://developer.android.google.cn/guide/components/bound-services#Creating)
 
-
-这个地方是存在提示的
-带软件包参数（包含 Parcelable 类型）的方法
-如果您的 AIDL 接口包含接收软件包作为参数（预计包含 Parcelable 类型）的方法，则在尝试从软件包读取之前，请务必通过调用 Bundle.setClassLoader(ClassLoader) 设置软件包的类加载器。否则，即使您在应用中正确定义 Parcelable 类型，也会遇到 ClassNotFoundException。例如，
-https://developer.android.google.cn/guide/components/aidl?hl=zh_cn
-
+Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger 会在单个线程中创建包含所有请求的队列，这样您就不必对服务进行线程安全设计。
 
 为接口使用 Messenger 比使用 AIDL 更简单，因为 Messenger 会将所有服务调用加入队列。纯 AIDL 接口会同时向服务发送多个请求，那么服务就必须执行多线程处理。
 对于大多数应用，服务无需执行多线程处理，因此使用 Messenger 可让服务一次处理一个调用。如果您的服务必须执行多线程处理，请使用 AIDL 来定义接口。
 
 大多数应用不应使用 AIDL 来创建绑定服务，因为它可能需要多线程处理能力，并可能导致更为复杂的实现。
 
-Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger 会在单个线程中创建包含所有请求的队列，这样您就不必对服务进行线程安全设计。
 
-##使用 Messenger
+##2 [使用Messenger](https://developer.android.google.cn/guide/components/bound-services?#Messenger)
 
-如需让接口跨不同进程工作，您可以使用 Messenger 为服务创建接口。采用这种方式时，服务会定义一个 Handler，用于响应不同类型的 Message 对象。
-此 Handler 是 Messenger 的基础，后者随后可与客户端分享一个 IBinder，以便客户端能利用 Message 对象向服务发送命令。
+如需让接口跨不同进程工作，您可以使用 Messenger 为服务创建接口。采用这种方式时，服务会定义一个 Handler，用于响应不同类型的 Message 对象。此 Handler 是 Messenger 的基础，后者随后可与客户端分享一个 IBinder，以便客户端能利用 Message 对象向服务发送命令。
 此外，客户端还可定义一个自有 Messenger，以便服务回传消息。
-
-使用 Messenger
-如果您需要让服务与远程进程通信，则可使用 Messenger 为您的服务提供接口。借助此方式，您无需使用 AIDL 便可执行进程间通信 (IPC)。
 
 以下是对 Messenger 使用方式的摘要：
 
-1.服务实现一个 Handler，由其接收来自客户端的每个调用的回调。
-2.服务使用 Handler 来创建 Messenger 对象（该对象是对 Handler 的引用）。
-3.Messenger 创建一个 IBinder，服务通过 onBind() 将其返回给客户端。
-4.客户端使用 IBinder 将 Messenger（它引用服务的 Handler）实例化，然后再用其将 Message 对象发送给服务。
-5.服务在其 Handler 中（具体而言，是在 handleMessage() 方法中）接收每个 Message。
+- 1.服务实现一个 Handler，由其接收来自客户端的每个调用的回调。
+- 2.服务使用 Handler 来创建 Messenger 对象（该对象是对 Handler 的引用）。
+- 3.Messenger 创建一个 IBinder，服务通过 onBind() 将其返回给客户端。
+- 4.客户端使用 IBinder 将 Messenger（它引用服务的 Handler）实例化，然后再用其将 Message 对象发送给服务。
+- 5.服务在其 Handler 中（具体而言，是在 handleMessage() 方法中）接收每个 Message。
 
 这样，客户端便没有调用服务的方法。相反，客户端会传递服务在其 Handler 中接收的消息（Message 对象）。
  之前的案例是add方法，在add方法中，我们是直接互动的
@@ -445,5 +465,11 @@ public final void writeValue(Object v) {
  
   
   
+
+
+https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn#Messenger
+
+
+https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn
   
   
