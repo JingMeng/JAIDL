@@ -42,6 +42,7 @@ public class MessengerService extends Service {
                     //   java.lang.ClassNotFoundException: me.fenfei.messenger.services.aidl.Student
                     try {
                         Bundle data = msg.getData();
+                        Log.i(TAG, data.getClassLoader() + "==========="+Bundle.class.getClassLoader());
                         //这就是报错的原因
 //                        if (source.readInt() != 0) {
 //                            obj = source.readParcelable(getClass().getClassLoader());

@@ -5,7 +5,7 @@
 
 ### 1.1 关于Parcelable
  
-  如果仅仅是简单的传递8中基本类型，没有什么好说，但是我们要传递对象，就不得不说Parcelable，为此在学习Messenger之前我们需要再次了解一下[Parcelable](https://developer.android.google.cn/guide/components/aidl#Bundles)
+  如果仅仅是简单的传递8中基本类型，没有什么好说，但是我们要传递对象，就不得不说Parcelable。为此在学习Messenger之前,我们需要再次了解一下[Parcelable](https://developer.android.google.cn/guide/components/aidl#Bundles)
 
   在使用`.aidl`文件的时候---`通过bundle传递`，我们需要按照下面的格式
 
@@ -27,7 +27,7 @@
 	    }
 	};
 
- 也就是需要特殊处理处理一下ClassLoader的问题，不然我们讲得到一个异常`ClassNotFoundException`
+ 也就是需要特殊处理处理一下ClassLoader的问题，不然我们将得到一个异常`ClassNotFoundException`
  
  在使用Messenger的时候我们同样也需要规避这个问题，我们将在后面进行讨论这是为什么。
  
