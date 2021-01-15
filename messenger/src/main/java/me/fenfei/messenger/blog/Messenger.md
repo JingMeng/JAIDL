@@ -57,7 +57,6 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
 - 5.服务在其 Handler 中（具体而言，是在 handleMessage() 方法中）接收每个 Message。
 
 这样，客户端便没有调用服务的方法。相反，客户端会传递服务在其 Handler 中接收的消息（Message 对象）。
- 之前的案例是add方法，在add方法中，我们是直接互动的
 
 下面这个简单的服务实例展示了如何使用 Messenger 接口：
 
