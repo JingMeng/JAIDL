@@ -31,9 +31,11 @@ public class MessengerService extends Service {
             applicationContext = context.getApplicationContext();
         }
 
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                Class.forName("")
                 case MSG_SAY_HELLO:
                     Toast.makeText(applicationContext, "hello!", Toast.LENGTH_SHORT).show();
                     break;

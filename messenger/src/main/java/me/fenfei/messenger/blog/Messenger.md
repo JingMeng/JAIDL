@@ -7,7 +7,7 @@
  
   如果仅仅是简单的传递8中基本类型，没有什么好说，但是我们要传递对象，就不得不说Parcelable。为此在学习Messenger之前,我们需要再次了解一下[Parcelable](https://developer.android.google.cn/guide/components/aidl#Bundles)
 
-  在使用`.aidl`文件的时候---通过`bundle`传递数据时：我们需要按照下面的格式
+  在使用`.aidl`文件的时候---通过`Bundle`传递数据时：我们需要按照下面的格式
 
 	// IRectInsideBundle.aidl
 	package com.example.android;
@@ -213,20 +213,20 @@ Server端可以按照官方的交互进行模板代码书写
 ## 3 注意事项：
 
 
-### 3.1 使用 classLoader的问题
+### 3.1 关于Parcelable的问题
+在1.1中关于Parcelable，我们说：在使用`Bundle`的时候请务必通过调用 `Bundle.setClassLoader(ClassLoader) `设置软件包的类加载器。否则，即使您在应用中正确定义 Parcelable类型，也会遇到 `ClassNotFoundException`
 
-1.1关于Parcelable中我们说：
-  在使用budler的时候请务必通过调用 Bundle.setClassLoader(ClassLoader) 设置软件包的类加载器。否则，即使您在应用中正确定义 Parcelable类型，也会遇到 ClassNotFoundException
-
+使用案例：
     bundle.setClassLoader(getClass().getClassLoader());
     Rect rect = bundle.getParcelable("rect");
     process(rect); // Do more with the parcelable.
 
-  
+
+官网在 Parcelable中，我们可以得到如下解析和要求：
  [通过 IPC 传递对象](https://developer.android.google.cn/guide/components/aidl#PassingObjects)
  您可以通过 IPC 接口，将某个类从一个进程发送至另一个进程。不过，您必须确保 IPC 通道的另一端可使用该类的代码，并且该类必须支持 Parcelable 接口。支持 Parcelable 接口很重要，因为 Android 系统能通过该接口将对象分解成可编组至各进程的基本对象。
  
- 如要创建支持 Parcelable 协议的类，您必须执行以下操作：
+ 如要创建支持 `Parcelable` 协议的类，您必须执行以下操作：
  
 - 让您的类实现 Parcelable 接口。
 - 实现 writeToParcel，它会获取对象的当前状态并将其写入 Parcel。
@@ -243,14 +243,45 @@ Server端可以按照官方的交互进行模板代码书写
 	 // Declare Rect so AIDL can find it and knows that it implements
 	 // the parcelable protocol.
 	 parcelable Rect;
-	 
+
+但是并未给我们明确说明为什么要使用ClassLoader，接下来我们将继续探讨
+
+### 3.2 使用 ClassLoader的问题
+
+Android中最主要的类加载器有如下4个：
+
+> BootClassLoader：加载Android Framework层中的class字节码文件（类似java的Bootstrap ClassLoader）
+
+> PathClassLoader：加载已经安装到系统中的Apk的class字节码文件（类似java的App ClassLoader）
+
+> DexClassLoader：加载制定目录的class字节码文件（类似java中的Custom ClassLoader）
+
+> BaseDexClassLoader：PathClassLoader和DexClassLoader的父类
+  
+
+在Server中执行下面的这段代码：
+
+    static class IncomingHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+			Bundle data = msg.getData();
+            Log.i(TAG, data.getClassLoader() + "==========="+Bundle.class.getClassLoader());
+        }
+    }
+
+
+将得到类似的输出
+
+	null===========java.lang.BootClassLoader@f672fc2
+
+在跨进程过程中，我们将丢失我们我们原始加载类的ClassLoader，并且当前的`Bundle`是隶属于Android Framework，由BootClassLoader加载，我们的自定义`Parcelable`是无法使用这个加载器加载的，将会得到`ClassNotFoundException`，为此我们需要明确的指出他需要的加载器
+ 
+todo： 不跨进程会丢失吗？ 是如何获取的，也就是3.2的讲解了
+
 在aidl的时候，编译器已经帮我们检查了，而且代码是最新生成的，属于同一个加载器，进而没有这么多的问题
 
- todo 父类委托机制添加解析
-
-  
-  
-  为什么要使用classforename带加载器的，而不是不带的，这集考虑到父类加载机制了
+为什么要使用`Class.forName(String name, boolean initialize, ClassLoader loader)`   带加载器的，而不是 `Class.forName("")`，这集考虑到父类加载机制了
   
  
  
