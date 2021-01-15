@@ -161,7 +161,7 @@ onServiceConnected 的时候创建我们的消息传递对象
      
 ### 2.5 如果想要双向消息传递：
   
-需要在client添加
+需要在Client添加
  
     /**
      * Target we publish for clients to send messages to IncomingHandler.
@@ -173,7 +173,7 @@ onServiceConnected 的时候创建我们的消息传递对象
 	  Message msg = Message.obtain(null,MessengerService.MSG_REGISTER_CLIENT);
 	  msg.replyTo = mMessenger;
 
-Server可以按照官方的交互进行模板代码书写
+Server端可以按照官方的交互进行模板代码书写
 
     /** Keeps track of all current registered clients. */
       ArrayList<Messenger> mClients = new ArrayList<Messenger>();
