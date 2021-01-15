@@ -91,7 +91,7 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
 
 ### 2.3 Client
 
-在需要的时候bindService
+在需要的时候`bindService`
 	
 	bindService(intent, mConnection,Context.BIND_AUTO_CREATE);
 
@@ -120,7 +120,7 @@ onServiceConnected 的时候创建我们的消息传递对象
         }
     };
 
-记得及时回收资源
+使用完毕的时候，记得及时回收资源
 
 	 @Override
 	 protected void onStop() {
@@ -138,7 +138,6 @@ onServiceConnected 的时候创建我们的消息传递对象
 调用
  
     Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO2, 0, 0);
- 
     mService.send(msg);
  
 传递对象参数
