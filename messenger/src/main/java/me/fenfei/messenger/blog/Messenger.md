@@ -7,7 +7,7 @@
  
   如果仅仅是简单的传递8中基本类型，没有什么好说，但是我们要传递对象，就不得不说Parcelable。为此在学习Messenger之前,我们需要再次了解一下[Parcelable](https://developer.android.google.cn/guide/components/aidl#Bundles)
 
-  在使用`.aidl`文件的时候---`通过bundle传递数据`，我们需要按照下面的格式
+  在使用`.aidl`文件的时候---通过`bundle`传递数据时：我们需要按照下面的格式
 
 	// IRectInsideBundle.aidl
 	package com.example.android;
