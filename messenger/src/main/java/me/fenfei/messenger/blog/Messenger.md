@@ -61,7 +61,7 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
 下面这个简单的服务实例展示了如何使用 Messenger 接口：(对应上面的摘要步骤)
 
 
-### 2.1 Server
+### 2.1 服务实现一个 Handler，由其接收来自客户端的每个调用的回调。---(Server)
 
     static class IncomingHandler extends Handler{
         @Override
@@ -70,7 +70,9 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
         }
     }
    
-### 2.2 Server
+### 2.2 Server端的创建
+   服务使用 Handler 来创建 Messenger 对象（该对象是对 Handler 的引用）---(Server)
+   Messenger 创建一个 IBinder，服务通过 onBind() 将其返回给客户端---(Server)
 
     /**
      * Target we publish for clients to send messages to IncomingHandler.
@@ -89,7 +91,7 @@ Messenger是执行进程间通信 (IPC) 最为简单的方式，因为 Messenger
     }
     
 
-### 2.3 Client
+### 2.3 客户端使用 IBinder 将 Messenger（它引用服务的 Handler）实例化----(Client)
 
 在需要的时候`bindService`
 	
@@ -133,7 +135,7 @@ onServiceConnected 的时候创建我们的消息传递对象
 	 }
 
 	
-### 2.4 Client
+### 2.4 调用Messenger将 Message 对象发送给服务-----（Client）
 
 调用
  
