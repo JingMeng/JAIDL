@@ -530,6 +530,11 @@ Class<?> parcelableClass = Class.forName(name, false , *parcelableClassLoader); 
       ClassLoader classLoader = bundle.getClassLoader();
 
 
- 
+## 资料
+ * [Methods with Bundle arguments containing Parcelables](https://developer.android.google.cn/guide/components/aidl#Bundles)
+ * [Using a Messenger](https://developer.android.google.cn/guide/components/bound-services#Messenger)
+ * [Passing objects over IPC](https://developer.android.google.cn/guide/components/aidl#PassingObjects)
+ * [Passing objects over IPC](https://developer.android.google.cn/guide/components/aidl#PassingObjects)
+ * [Android 类加载机制及热修复原理](https://juejin.cn/post/6844903855990243335)
 
   
