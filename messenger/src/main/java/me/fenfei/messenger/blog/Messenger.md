@@ -301,7 +301,7 @@ todo： 不跨进程会丢失吗？ 是如何获取的，也就是3.2的讲解�
          mFlags &= ~FLAG_HAS_FDS_KNOWN;
      }
 从上面的代码，我们似乎也没有看见，最后的处理过程，具体的回调等方法，那我们继续往下看：
-看一下Bundle方法会发现，他也是一个Parcelable对象：
+看一下`Bundle`方法会发现，他也是一个Parcelable对象：
 
 	public final class Bundle extends BaseBundle implements Cloneable, Parcelable
 
@@ -372,20 +372,34 @@ todo： 不跨进程会丢失吗？ 是如何获取的，也就是3.2的讲解�
 	  }  
   
   
-	获取
+获取（主要观察Bundle#createFromParcel）
+
+基本使用
 
     Bundle bundle = new Bundle();
     bundle.getParcelable("student");
   
-        
-     在跨进程传递时候，应该是从这个地方产生的数据
-     BaseBundle(Parcel parcelledData) {
-            readFromParcelInner(parcelledData);
-     }
-    
-        BaseBundle(Parcel parcelledData, int length) {
-            readFromParcelInner(parcelledData, length);
+      public final Bundle readBundle() {
+        return readBundle(null);
+    }
+
+    public final Bundle readBundle(ClassLoader loader) {
+        int length = readInt();
+        if (length < 0) {
+            if (Bundle.DEBUG) Log.d(TAG, "null bundle: length=" + length);
+            return null;
         }
+		//主要代码
+        final Bundle bundle = new Bundle(this, length);
+        if (loader != null) {
+            bundle.setClassLoader(loader);
+        }
+        return bundle;
+    }
+	
+    BaseBundle(Parcel parcelledData, int length) {
+        readFromParcelInner(parcelledData, length);
+    }
 
 
     /* package */ void readArrayMapInternal(ArrayMap outVal, int N,
@@ -479,32 +493,34 @@ todo： 不跨进程会丢失吗？ 是如何获取的，也就是3.2的讲解�
     }
 
 
-  一些列的检查，排查类的存在等条件，在这个地方出现了类加载器的概念
+一些列的检查，排查类的存在等条件，在这个地方出现了类加载器的概念
+
+简单的检查了以下几个条件：
+
+
+- 1.是否实现了Parcelable，是否有CREATOR 常量
+- 2.是否实现了Parcelable.Creator
+以上的所有检查只为了找到我们所需要的类。因为是使用反射此处对象的创建使用的是反射
+Class<?> parcelableClass = Class.forName(name, false , *parcelableClassLoader); 还需要解释一下这句话
   
-   
-       Bundle data = msg.getData();
-       或者
-       Bundle data = msg.obj;
-       都不会报错，是因为Bundle 在系统加载器的范围内，但是我们新定义的类，不在那个范围内导致
+
+ Bundle data = msg.getData();
+ 或者
+ Bundle data = msg.obj;
+ 都不会报错，是因为Bundle 在系统加载器的范围内，但是我们新定义的类，不在那个范围内导致
        
        
-  Bundle bundle = new Bundle();
-  bundle.putParcelable("msg", new Student("zyy"));
-  msg.obj = new Student("zyy");   
+    Bundle bundle = new Bundle();
+    bundle.putParcelable("msg", new Student("zyy"));
+    msg.obj = new Student("zyy");   
+    
+> 如果通过这种方式，不管如何，我们得到的代码都会报错
   
-  如果通过这种方式，不管如何，我们得到的代码都会报错
   
-  
-  
+ 
+
+
 
  
-  
-  
 
-
-https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn#Messenger
-
-
-https://developer.android.google.cn/guide/components/bound-services?hl=zh-cn
-  
   
