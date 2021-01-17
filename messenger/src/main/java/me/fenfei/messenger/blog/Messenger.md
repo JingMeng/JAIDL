@@ -514,9 +514,10 @@ Class<?> parcelableClass = Class.forName(name, false , *parcelableClassLoader); 
     bundle.putParcelable("msg", new Student("zyy"));
     msg.obj = new Student("zyy");   
     
-> 如果通过这种方式，不管如何，我们得到的代码都会报错
+ 如果通过这种方式，不管如何，我们得到的代码都会报错
   
 > 补充：
+
 > 1.在aidl的时候，编译器已经帮我们检查了，而且代码是最新生成的，属于同一个加载器，进而没有这么多的问题
 
 > 2.至于我们在非跨进程的处理中，是不需要处理,具体原因可以看一下，下面的代码就好，看看Intent的实现：
