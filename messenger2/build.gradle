@@ -1,14 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    namespace 'me.fenfei.messenger2'
+    compileSdk 34
 
 
     defaultConfig {
         applicationId "me.fenfei.messenger2"
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdk 19
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -20,6 +24,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    
     }
 
 }
@@ -33,3 +38,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
+
+
+
+
